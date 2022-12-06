@@ -1,3 +1,7 @@
+# tfpbrowser 0.0.8 _2022-12-06_
+
+- make GH actions run on all branches (not just main)
+
 # tfpbrowser 0.0.7 _2022-12-01_
 
 - Fix: Remove ::: from unit tests
