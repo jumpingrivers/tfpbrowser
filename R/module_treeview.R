@@ -64,6 +64,8 @@ treeviewServer = function(id) {
         girafe_options = list(
           ggiraph::opts_selection(type = "single"),
           ggiraph::opts_sizing(width = 0.8),
+          ggiraph::opts_hover_inv(css = "fill:grey;"),
+          ggiraph::opts_hover(css = "fill:red;"),
           ggiraph::opts_tooltip(
             css = tooltip_css,
             use_fill = FALSE
