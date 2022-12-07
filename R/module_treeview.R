@@ -61,17 +61,18 @@ treeviewServer = function(id) {
           "border-radius:8px;",
           "font-family:\"Courier New\",monospace;"
         )
+        girafe_options = list(
+          ggiraph::opts_selection(type = "single"),
+          ggiraph::opts_sizing(width = 0.8),
+          ggiraph::opts_tooltip(
+            css = tooltip_css,
+            use_fill = FALSE
+          )
+        )
         suppressWarnings(
           ggiraph::girafe(
             ggobj = imported_ggtree(),
-            options = list(
-              ggiraph::opts_selection(type = "single"),
-              ggiraph::opts_sizing(width = 0.8),
-              ggiraph::opts_tooltip(
-                css = tooltip_css,
-                use_fill = FALSE
-              )
-            )
+            options = girafe_options
           )
         )
       })
