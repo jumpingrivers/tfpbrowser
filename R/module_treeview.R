@@ -47,10 +47,13 @@ treeviewServer = function(id) {
                                 treeviewSelected = input$treeview_selected)
       })
 
+      imported_ggtree = shiny::reactive({
+        filename = get_filename(input$widgetChoice)
+        readRDS(filename)
+      })
+
       # create plotly output from saved ggplot2 outputs
       output$treeview = ggiraph::renderGirafe({
-        filename = get_filename(input$widgetChoice)
-        g = readRDS(filename)
         tooltip_css = paste0(
           "background-color:black;",
           "color:grey;",
@@ -60,7 +63,7 @@ treeviewServer = function(id) {
         )
         suppressWarnings(
           ggiraph::girafe(
-            ggobj = g,
+            ggobj = imported_ggtree(),
             options = list(
               ggiraph::opts_selection(type = "single"),
               ggiraph::opts_sizing(width = 0.8),
