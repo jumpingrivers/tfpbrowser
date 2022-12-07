@@ -19,41 +19,9 @@ app_server = function(input, output, session) {
 
 
   # Load treeview -----------------------------------------------------------
-
-  # create plotly output from saved ggplot2 outputs
-  output$treeview = ggiraph::renderGirafe({
-    filename = get_filename(input$widgetChoice)
-    g = readRDS(filename)
-    tooltip_css = paste0(
-      "background-color:black;",
-      "color:grey;",
-      "padding:14px;",
-      "border-radius:8px;",
-      "font-family:\"Courier New\",monospace;"
-    )
-    suppressWarnings(ggiraph::girafe(ggobj = g,
-                    options = list(
-                      ggiraph::opts_selection(
-                        type = "single"),
-                      ggiraph::opts_sizing(
-                        width = 0.8),
-                      ggiraph::opts_tooltip(
-                        css = tooltip_css,
-                        use_fill = FALSE)
-                      )
-                    ))
-  })
-
-  # get selected cluster id based on widget choice
-  selected_cluster_id = shiny::reactive({
-    get_selected_cluster_id(widgetChoice = input$widgetChoice,
-                            treeviewSelected = input$treeview_selected)
-  })
-
-  # output result of click
-  output$select_text = shiny::renderText({
-    paste("You have selected cluster ID:", selected_cluster_id())
-  })
+  selected_cluster_id = treeviewServer(
+    "treeview"
+  )
 
   # Tables Tab --------------------------------------------------------------
   tablesServer(
@@ -73,4 +41,8 @@ app_server = function(input, output, session) {
     cluster_choice = selected_cluster_id
   )
 
-} # end server function
+  # output result of click
+  output$select_text = shiny::renderText({
+    paste("You have selected cluster ID:", selected_cluster_id())
+  })
+ } # end server function

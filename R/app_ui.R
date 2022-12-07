@@ -54,28 +54,8 @@ app_ui = function(request) {
                         )
           ), # end fluid row
 
-        # Bottom row - show tree (static html output from tfpscanner)
-        shiny::fluidRow(
-
-          shiny::column(12,
-
-            # choose type of treeviw
-            shiny::radioButtons(inputId = "widgetChoice",
-                                label = "Select treeview",
-                                choices = c(
-                                  "Logistic growth rate",
-                                  "Simple logistic growth rate",
-                                  "Simple trait log odds"),
-                                inline = TRUE),
-
-            # show treeview widget
-            shiny::wellPanel(
-              ggiraph::girafeOutput("treeview"),
-              style = "background: white",
-            ),
-            shiny::br()
-          )
-        ) # end fluid row
+        # Bottom row - show tree (from tfpscanner)
+        treeviewUI("treeview"),
       ), # end "data" page
 
       # about page
