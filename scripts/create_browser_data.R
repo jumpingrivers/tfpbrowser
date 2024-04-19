@@ -65,7 +65,7 @@ treeview_args <- list(
 browser_args <- append(
   list(
     e0 = normalizePath(env_file),
-    output_dir = normalisePath(output_dir)
+    output_dir = normalizePath(output_dir)
   ),
   treeview_args
 )
