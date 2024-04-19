@@ -1,3 +1,26 @@
+# create_browser_data.R -----------------------------------------------------------------------
+
+# To run this script for a new dataset:
+# - modify the "User parameters" section below (see the comments in that section)
+# - Either run it using
+#   - `Rscript ./scripts/create_browser_data.R` at the command line
+#   - or `source("./scripts/create_browser_data.R")` in R
+# - Once finished, this script will explain how to use the created figures within tfpbrowser.
+
+# Ensure that the R session used when running this script is closed before running the app, because
+# this script runs in a defined environment that doesn't contain some of the packages needed by the
+# app.
+
+# Script environment --------------------------------------------------------------------------
+
+# Here we define a running environment that is compatible with the versions of ggplot2, igraph etc
+# that are used when running the app.
+#
+# If the renv.lock for the app is updated, the versions of the packages defined here should be
+# updated to be in-sync with the renv.lock.
+#
+# {tfpscanner} is not directly used by the app, so it isn't present in the renv.lock for the app.
+
 renv::use(
   # The CRAN versions of these packages should match those used in the 'renv.lock' for tfpbrowser,
   # to ensure that the figure formatting
@@ -11,14 +34,17 @@ renv::use(
   "mrc-ide/tfpscanner@7ee27416d69ec3eaf7e4158f38c31125b3c38c7d"
 )
 
-# User parameters
-# - The scanner environment file ("path/to/scanner_output/scanner-env-YYYY-MM-DD.rds")
-# - The output directory for the treeviews
-# - Any non-default arguments for the `treeview()` function
-#
+# User parameters -----------------------------------------------------------------------------
+
 # File paths can be specified either relative to the working directory, or as absolute paths
+#
+# 1) The scanner environment file ("path/to/scanner_output/scanner-env-YYYY-MM-DD.rds")
 env_file <- file.path()
+
+# 2) The output directory for the treeviews (typically the parent of the 'scanner_output' directory)
 output_dir <- file.path()
+
+# 3) Any non-default arguments for the `treeview()` function
 treeview_args <- list(
   # branch_cols = c("logistic_growth_rate", "clock_outlier"),
   # mutations = c("S:A222V", "S:Y145H", "N:Q9L", "S:E484K"),
@@ -31,7 +57,9 @@ treeview_args <- list(
   # heatmap_fill = c(`FALSE` = "grey90", `TRUE` = "grey70")
 )
 
-## ============================================================================================== ##
+# Create the browser data / figures -----------------------------------------------------------
+
+# Please don't edit this section
 
 # Arguments for `create_browser_data`
 browser_args <- append(
@@ -50,11 +78,13 @@ do.call(
   browser_args
 )
 
-# =============================================================================================== ##
+# How to use the new browser data -------------------------------------------------------------
 
 app_message <- glue::glue('
 # To run the "tfpbrowser" app over this dataset, please perform the following in R:
 
+# Start a new session first
+# - the environment for this script will interfere with that used by the app
 Sys.setenv(APP_DATA_DIR = "{output_dir}")
 pkgload::load_all()
 run_app()
