@@ -13,7 +13,7 @@
 
 # Script environment --------------------------------------------------------------------------
 
-# Here we define a running environment that is compatible with the versions of ggplot2, igraph etc
+# Here we define a running environment that is compatible with the versions of ggplot2, ggiraph etc
 # that are used when running the app.
 #
 # If the renv.lock for the app is updated, the versions of the packages defined here should be
@@ -21,13 +21,24 @@
 #
 # {tfpscanner} is not directly used by the app, so it isn't present in the renv.lock for the app.
 
+tfpbrowser_env <- jsonlite::read_json("renv.lock")
+
+required_packages <- c("ggplot2", "ggiraph", "ggtree")
+required_versions <- Map(
+  function(package, pkg_details) {
+    paste0(package, "@", pkg_details[["Version"]])
+  },
+  required_packages,
+  tfpbrowser_env[["Packages"]][required_packages]
+)
+
 renv::use(
   # The CRAN versions of these packages should match those used in the 'renv.lock' for tfpbrowser,
   # to ensure that the figure formatting
-  "ggplot2@3.5.0",
+  required_versions[["ggplot2"]],
   # "igraph@1.5.0",
-  "ggiraph@0.8.9",
-  "ggtree@3.10.1",
+  required_versions[["ggiraph"]],
+  required_versions[["ggtree"]],
   # These packages are required implicitly by {tfpscanner}, but not by {tfpbrowser}
   "svglite@2.1.3",
   # This is the HEAD of `jumpingrivers:dev-202403` as of 2024-04-15
