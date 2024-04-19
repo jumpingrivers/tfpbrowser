@@ -81,7 +81,9 @@ do.call(
 # How to use the new browser data -------------------------------------------------------------
 
 app_message <- glue::glue('
-# To run the "tfpbrowser" app over this dataset, please perform the following in R:
+# ================================================================================ #
+# To run the "tfpbrowser" app over this dataset, please perform the following from
+# the "tfpbrowser" home directory in R:
 
 # Start a new session first
 # - the environment for this script will interfere with that used by the app
