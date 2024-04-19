@@ -5,7 +5,7 @@ renv::use(
   "igraph@1.5.0",
   "ggiraph@0.8.4",
   "ggtree@3.8.2",
-  # This is the HEAD of `jumpingrivers:draft-all-features-202403` as of 2024-04-15
+  # This is the HEAD of `jumpingrivers:dev-202403` as of 2024-04-15
   # If the commit ID is absent, this will use the latest 'master' branch
   # Including the commit ID allows us to use development-versions of the 'tfpscanner' package
   "mrc-ide/tfpscanner@7ee27416d69ec3eaf7e4158f38c31125b3c38c7d"
@@ -15,6 +15,8 @@ renv::use(
 # - The scanner environment file ("path/to/scanner_output/scanner-env-YYYY-MM-DD.rds")
 # - The output directory for the treeviews
 # - Any non-default arguments for the `treeview()` function
+#
+# File paths can be specified either relative to the working directory, or as absolute paths
 env_file <- file.path()
 output_dir <- file.path()
 treeview_args <- list(
@@ -47,3 +49,15 @@ do.call(
   tfpscanner::create_browser_data,
   browser_args
 )
+
+# =============================================================================================== ##
+
+app_message <- glue::glue('
+# To run the "tfpbrowser" app over this dataset, please perform the following in R:
+
+Sys.setenv(APP_DATA_DIR = "{output_dir}")
+pkgload::load_all()
+run_app()
+')
+
+message(app_message)
