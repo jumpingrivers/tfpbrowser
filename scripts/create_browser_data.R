@@ -28,6 +28,8 @@ renv::use(
   "igraph@1.5.0",
   "ggiraph@0.8.4",
   "ggtree@3.8.2",
+  # These packages are required implicitly by {tfpscanner}, but not by {tfpbrowser}
+  "svglite@2.1.3",
   # This is the HEAD of `jumpingrivers:dev-202403` as of 2024-04-15
   # If the commit ID is absent, this will use the latest 'master' branch
   # Including the commit ID allows us to use development-versions of the 'tfpscanner' package
