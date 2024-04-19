@@ -24,10 +24,10 @@
 renv::use(
   # The CRAN versions of these packages should match those used in the 'renv.lock' for tfpbrowser,
   # to ensure that the figure formatting
-  "ggplot2@3.4.0",
-  "igraph@1.5.0",
-  "ggiraph@0.8.4",
-  "ggtree@3.8.2",
+  "ggplot2@3.5.0",
+  # "igraph@1.5.0",
+  "ggiraph@0.8.9",
+  "ggtree@3.10.1",
   # These packages are required implicitly by {tfpscanner}, but not by {tfpbrowser}
   "svglite@2.1.3",
   # This is the HEAD of `jumpingrivers:dev-202403` as of 2024-04-15
