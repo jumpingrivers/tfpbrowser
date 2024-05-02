@@ -8,8 +8,10 @@
 #' @return   Scalar string. The data-directory for use in the app.
 
 get_data_dir = function() {
-  Sys.getenv(
+  path = Sys.getenv(
     "APP_DATA_DIR",
     system.file("app", "www", "data", package = "tfpbrowser")
   )
+
+  normalizePath(path)
 }

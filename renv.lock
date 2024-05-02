@@ -225,6 +225,20 @@
       ],
       "Hash": "68bd2b066e1fe780bbf62fc8bcc36de3"
     },
+    "bsicons": {
+      "Package": "bsicons",
+      "Version": "0.1.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "cli",
+        "htmltools",
+        "rlang",
+        "utils"
+      ],
+      "Hash": "d8f892fbd94d0b9b1f6d688b05b8633c"
+    },
     "bslib": {
       "Package": "bslib",
       "Version": "0.6.1",
@@ -772,13 +786,7 @@
       "Package": "highr",
       "Version": "0.10",
       "Source": "Repository",
-      "Repository": "RSPM",
-      "RemoteType": "standard",
-      "RemotePkgRef": "highr",
-      "RemoteRef": "highr",
-      "RemoteRepos": "https://packagemanager.rstudio.com/all/latest",
-      "RemotePkgPlatform": "source",
-      "RemoteSha": "0.10",
+      "Repository": "https://packagemanager.rstudio.com/all/latest",
       "Requirements": [
         "R",
         "xfun"
@@ -904,13 +912,7 @@
       "Package": "janitor",
       "Version": "2.2.0",
       "Source": "Repository",
-      "Repository": "RSPM",
-      "RemoteType": "standard",
-      "RemotePkgRef": "janitor",
-      "RemoteRef": "janitor",
-      "RemoteRepos": "https://packagemanager.rstudio.com/all/latest",
-      "RemotePkgPlatform": "source",
-      "RemoteSha": "2.2.0",
+      "Repository": "https://packagemanager.rstudio.com/all/latest",
       "Requirements": [
         "R",
         "dplyr",
@@ -1401,8 +1403,13 @@
     },
     "renv": {
       "Package": "renv",
-      "Version": "1.0.5",
-      "Source": "Repository"
+      "Version": "1.0.7",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "utils"
+      ],
+      "Hash": "397b7b2a265bc5a7a06852524dabae20"
     },
     "rlang": {
       "Package": "rlang",
@@ -1527,13 +1534,7 @@
       "Package": "shinybrowser",
       "Version": "1.0.0",
       "Source": "Repository",
-      "Repository": "RSPM",
-      "RemoteType": "standard",
-      "RemotePkgRef": "shinybrowser",
-      "RemoteRef": "shinybrowser",
-      "RemoteRepos": "https://packagemanager.rstudio.com/all/latest",
-      "RemotePkgPlatform": "source",
-      "RemoteSha": "1.0.0",
+      "Repository": "https://packagemanager.rstudio.com/all/latest",
       "Requirements": [
         "R",
         "shiny"
