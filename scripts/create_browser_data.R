@@ -7,46 +7,6 @@
 #   - or `source("./scripts/create_browser_data.R")` in R
 # - Once finished, this script will explain how to use the created figures within tfpbrowser.
 
-# Ensure that the R session used when running this script is closed before running the app, because
-# this script runs in a defined environment that doesn't contain some of the packages needed by the
-# app.
-
-# Script environment --------------------------------------------------------------------------
-
-# Here we define a running environment that is compatible with the versions of ggplot2, ggiraph etc
-# that are used when running the app.
-#
-# If the renv.lock for the app is updated, the versions of the packages defined here should be
-# updated to be in-sync with the renv.lock.
-#
-# {tfpscanner} is not directly used by the app, so it isn't present in the renv.lock for the app.
-
-tfpbrowser_env <- jsonlite::read_json("renv.lock")
-
-required_packages <- c("ggplot2", "ggiraph", "ggtree")
-required_versions <- Map(
-  function(package, pkg_details) {
-    paste0(package, "@", pkg_details[["Version"]])
-  },
-  required_packages,
-  tfpbrowser_env[["Packages"]][required_packages]
-)
-
-renv::use(
-  # The CRAN versions of these packages should match those used in the 'renv.lock' for tfpbrowser,
-  # to ensure that the figure formatting
-  required_versions[["ggplot2"]],
-  # "igraph@1.5.0",
-  required_versions[["ggiraph"]],
-  required_versions[["ggtree"]],
-  # These packages are required implicitly by {tfpscanner}, but not by {tfpbrowser}
-  "svglite@2.1.3",
-  # This is the HEAD of `jumpingrivers:dev-202403` as of 2024-04-15
-  # If the commit ID is absent, this will use the latest 'master' branch
-  # Including the commit ID allows us to use development-versions of the 'tfpscanner' package
-  "mrc-ide/tfpscanner@7ee27416d69ec3eaf7e4158f38c31125b3c38c7d"
-)
-
 # User parameters -----------------------------------------------------------------------------
 
 # File paths can be specified either relative to the working directory, or as absolute paths
@@ -68,6 +28,48 @@ treeview_args <- list(
   # heatmap_offset = 8,
   # heatmap_lab_offset = -6,
   # heatmap_fill = c(`FALSE` = "grey90", `TRUE` = "grey70")
+)
+
+# Script environment --------------------------------------------------------------------------
+
+# Ensure that the R session used when running this script is closed before running the app, because
+# this script runs in a defined environment that doesn't contain some of the packages needed by the
+# app.
+#
+# Here we define a running environment that is compatible with the versions of ggplot2, ggiraph etc
+# that are used when running the app.
+#
+# If the renv.lock for the app is updated, the versions of the packages defined here should be
+# updated to be in-sync with the renv.lock.
+#
+# {tfpscanner} is not directly used by the app, so it isn't present in the renv.lock for the app.
+
+tfpbrowser_env <- jsonlite::read_json("renv.lock")
+
+required_packages <- c("BiocVersion", "ggplot2", "ggiraph", "ggtree")
+required_versions <- Map(
+  function(package, pkg_details) {
+    paste0(package, "@", pkg_details[["Version"]])
+  },
+  required_packages,
+  tfpbrowser_env[["Packages"]][required_packages]
+)
+
+# {BiocManager} will be loaded along with {renv} when an R session is started in this repository
+
+renv::use(
+  # The versions of these packages should match those used in the 'renv.lock' for tfpbrowser, to
+  # ensure that the figure formatting
+  required_versions[["BiocVersion"]],
+  required_versions[["ggplot2"]],
+  required_versions[["ggiraph"]],
+  required_versions[["ggtree"]],
+  # These packages are required implicitly by {tfpscanner}, but not by {tfpbrowser}
+  "svglite@2.1.3",
+  # This is the HEAD of `jumpingrivers:dev-202403` as of 2024-04-15
+  # If the commit ID is absent, this will use the latest 'master' branch
+  # Including the commit ID allows us to use development-versions of the 'tfpscanner' package
+  "mrc-ide/tfpscanner@7ee27416d69ec3eaf7e4158f38c31125b3c38c7d"
 )
 
 # Create the browser data / figures -----------------------------------------------------------
