@@ -1,1 +1,2 @@
 scripts/create_browser_data.R
+inst/app/www/data/
