@@ -46,7 +46,7 @@ treeview_args <- list(
 
 tfpbrowser_env <- jsonlite::read_json("renv.lock")
 
-required_packages <- c("BiocVersion", "ggplot2", "ggiraph", "ggtree")
+required_packages <- c("BiocVersion", "fastmap", "ggplot2", "ggiraph", "ggtree")
 required_versions <- Map(
   function(package, pkg_details) {
     paste0(package, "@", pkg_details[["Version"]])
@@ -62,8 +62,9 @@ renv::use(
   # ensure that the figure formatting
   required_versions[["BiocVersion"]],
   required_versions[["ggplot2"]],
+  required_versions[["fastmap"]],
   required_versions[["ggiraph"]],
-  required_versions[["ggtree"]],
+  "YuLab-SMU/ggtree@daf3371",
   # These packages are required implicitly by {tfpscanner}, but not by {tfpbrowser}
   "svglite@2.1.3",
   # This is the HEAD of `jumpingrivers:dev-202403` as of 2024-04-15
