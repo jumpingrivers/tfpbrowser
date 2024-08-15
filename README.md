@@ -28,6 +28,43 @@ in the `tfpbrowser` directory.
 
 ## Running the Shiny application
 
+Before running the app, we must ensure that the packages it depends upon are available and a dataset
+for presentation is in place.
+
+Note that the bioconductor packages used by `tfpbrowser` are tied to a specific version of R.
+As of 2024, you should use R v4.2.x.
+
+### Activating the environment for the application
+
+The specific versions of the packages used by the app (the package environment) are declared in an
+`renv.lock` file. See the [{renv} documentation](https://rstudio.github.io/renv/) for further
+details. `renv` isolates the environment for this app away from the R packages installed elsewhere
+on your machine.
+
+The first time that you open the `tfpbrowser` project in an R session, activating the package
+environment may fail. You will need to follow these steps:
+
+- Install `renv` (`install.packages("renv")`)
+- Install the `tfpbrowser` package environment (`renv::restore()`)
+- Restart the session (In RStudio `Session -> Restart R`)
+
+The package environment will be automatically loaded when the project is opened on subsequent
+occasions. On successfully loading the environment, `renv` will print out the following comment:
+
+```
+- Project '~/path/to/tfpbrowser' loaded. [renv 1.0.7]
+```
+
+The packages defined in the `renv.lock` file may change over time. If you receive a message that
+`The project is out-of-sync...` when you load the `tfpbrowser` project, it is likely that the
+package environment in `renv.lock` has updated, but your local machine is using an older
+environment. Run `renv::restore()` to sync your `tfpbrowser` environment with the current
+`renv.lock` file.
+
+### Directing the app to the dataset
+
+### Running
+
 ```
 tfpbrowser::run_app()
 ```
