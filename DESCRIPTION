@@ -16,7 +16,7 @@ Imports:
     fs,
     ggiraph (>= 0.8.4),
     ggplot2,
-    ggtree (>= 3.13.0.1),
+    ggtree,
     glue,
     htmltools,
     janitor,
