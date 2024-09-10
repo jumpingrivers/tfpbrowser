@@ -32,6 +32,8 @@ Imports:
     stringr,
     tibble
 Suggests:
+    knitr,
+    rmarkdown,
     shinytest2,
     testthat,
     usethis
@@ -39,5 +41,6 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
-Remotes:  
+Remotes: 
     YuLab-SMU/ggtree@daf3371
+VignetteBuilder: knitr
