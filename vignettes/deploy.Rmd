@@ -74,10 +74,11 @@ If you receive a message stating that:
 #### GitHub Personal-Access Token (PAT)
 
 Some of the packages used by tfpscanner during data pre-processing (`ggtree` and `tfpscanner`
-itself) must be installed from github while data processing is underway. To make this possible, you
+itself) must be installed from GitHub while data processing is underway. To make this possible, you
 will need a `GITHUB_PAT` variable to be defined - this is a personal token that you can obtain from
-[github](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens). If you have access to the {tfpscanner} repository on GitHub, then you will be able to install
-it using your personal access token.
+[github](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
+If you have access to the {tfpscanner} repository on GitHub, then you will be able to install it
+using your personal access token.
 
 To make your PAT available to tfpbrowser, add a `.Renviron` file to the tfpbrowser project /
 repository with your PAT as the value on the 'GITHUB_PAT' variable line.
@@ -301,9 +302,21 @@ Then we deployed the app using the following command:
 rsconnect::deployApp()
 ```
 
-This uploaded all the files in the repository, which is unnecessary... [TODO: continue here]
+This uploaded all the files in the repository, which is unnecessary. RStudio provides a second
+method for deploying a shiny app to shinyapps.io. Assuming your account info and .Renviron file have
+been set up (as above) run the {tfpbrowser} app
 
-```{r setup}
-# library(tfpbrowser)
+```r
+pkgload::load_all()
+run_app()
 ```
+
+Then click on the "Publish" or "Republish" button in the RStudio browser window that opens.
+A "Publish to Server" dialog box will open, and within this you can select/deselect which files to
+upload to shinyapps.io along with your app. You shouldn't upload any tests, un-needed datasets,
+github workflows.
+
+The minimum files you will need for deployment are (`.Rprofile`, `.Renviron`, `app.R`,
+`DESCRIPTION`, `NAMESPACE`, `renv.lock`, and the contents of `inst/` and `R/`). If the data you wish
+to deploy with the app is in some other directory, this must also be selected for upload.
 
