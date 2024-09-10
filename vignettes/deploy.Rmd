@@ -1,0 +1,309 @@
+---
+title: "Deploying tfpbrowser"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Deploying tfpbrowser}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Example
+
+Here we will
+
+- run tfpscanner against a set of scanner output,
+- configure tfpbrowser to use the newly created tfpscanner output
+- deploy the app, along with the new data, to shinyapps.io
+
+We are following the workflow described in the README for {tfpbrowser}, but with a practical
+example.
+
+In this example, we have:
+
+- a dataset in `~/temp-data/wcdemo/` and 
+- the repository for {tfpbrowser} in `~/github/imp/tfpbrowser`
+- and are using `r R.version.string`
+
+```{r}
+dirs <- list(
+  data = "~/temp-data/wcdemo/",
+  repo = "~/github/imp/tfpbrowser/"
+)
+```
+
+### General workflow issues
+
+The following must be ran inside RStudio in the {tfpbrowser} repository/project and must be ran
+using the R version specified above. There are very precise package-requirements that ensure the
+data-processing is compatible with the app, and these can only be controlled from the {tfpbrowser}
+project.
+
+We assume you have cloned the {tfpbrowser} repository to your machine (in this example it is at
+`r dirs$repo`). Open RStudio and then open the {tfpbrowser} 'Project' (File -> Open Project;
+navigate to the tfpbrowser repo and double click on `tfpbrowser.Rproj`).
+
+We will use the [{fs}](https://fs.r-lib.org/) package for working with the file system.
+
+You should see an {renv} environment gets activated on opening the {tfpbrowser} project. This is the
+environment within which the app runs (a related, but separate environment is used for data
+pre-processing, see below).
+
+```r
+... R preamble ...
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+- Project '~/github/imp/tfpbrowser' loaded. [renv 1.0.7]
+```
+
+If you receive a message stating that:
+
+- "there is no package called 'renv'", you will need to install {renv} from CRAN
+  (install.packages("renv")) and then reopen the {tfpbrowser} project
+- the renv environment is out of sync, you may need to restore the package-versions that are defined
+  in the lock file (`renv::restore()`).
+
+#### GitHub Personal-Access Token (PAT)
+
+Some of the packages used by tfpscanner during data pre-processing (`ggtree` and `tfpscanner`
+itself) must be installed from github while data processing is underway. To make this possible, you
+will need a `GITHUB_PAT` variable to be defined - this is a personal token that you can obtain from
+[github](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens). If you have access to the {tfpscanner} repository on GitHub, then you will be able to install
+it using your personal access token.
+
+To make your PAT available to tfpbrowser, add a `.Renviron` file to the tfpbrowser project /
+repository with your PAT as the value on the 'GITHUB_PAT' variable line.
+
+```bash
+GITHUB_PAT=ghp_blahBlahBlah...
+```
+
+Do not commit your `.Renviron` file using git! This file stores variables / secrets that are
+required when the app runs. The variables will differ from one deployment to another, and the
+secrets should be secret!
+
+### The scanner dataset
+
+The contents of the scanner dataset directory are as follows:
+
+```r
+fs::dir_tree(dirs$data, recurse=1)
+~/temp-data/wcdemo
+└── scanner_output
+    ├── 1601
+    ├── ...
+    ├── 2194
+    ├── scanner-2021-11-27.rds
+    └── scanner-env-2021-11-27.rds
+```
+
+The 'scanner-env' file and the contents of the `1601` to `2194` directories are needed for
+tfpscanner to generate the files needed by tfpbrowser.
+
+The directory `r dirs$data` contains ~ 13MB of data before processing by tfpscanner.
+
+### Processing the scanner dataset
+
+We use the `./scripts/create_browser_data.R` script inside the {tfpbrowser} repository to
+process the scanner data.
+
+There are three user-configurable parameters in that script (`env_file`, `output_dir`,
+`treeview_args`).
+We define the location of the `scanner-env-2021-11-27.rds` file and the output directory.
+
+The output directory must be the parent of the input `scanner_output` directory for now (that is,
+`r dirs$data` in this example) because tfpbrowser requires additional files from the
+`scanner_output` directory to run.
+
+We haven't modified the `treeview_args` parameter here, but this can be used to pass additional
+arguments to `tfpscanner::treeview()`.
+
+After modifying the script in-place, the user-parameters section of `create_browser_data.R` looks
+like this:
+
+```r
+# User parameters -----------------------------------------------------------------------------
+
+# File paths can be specified either relative to the working directory, or as absolute paths
+#
+# 1) The scanner environment file ("path/to/scanner_output/scanner-env-YYYY-MM-DD.rds")
+env_file <- file.path("~/temp-data/wcdemo/scanner_output/scanner-env-2021-11-27.rds")
+
+# 2) The output directory for the treeviews (typically the parent of the 'scanner_output' directory)
+output_dir <- file.path("~/temp-data/wcdemo")
+
+# 3) Any non-default arguments for the `treeview()` function
+treeview_args <- list(
+  # unmodified
+)
+```
+
+With these changes in place, the `create_browser_data.R` script can be ran. Either use `source("scripts/create_browser_data.R")` or open the script in RStudio and click the "Source"
+button above the text editor for the script.
+
+The script runs in it's own environment and will install packages into a temporary location while
+it is running. This process will fail if you haven't defined a `GITHUB_PAT` variable (see above).
+
+```r
+source("~/github/imp/tfpbrowser/scripts/create_browser_data.R")
+
+#> The following loaded package(s) have been updated:
+#> - BiocManager
+#> Restart your R session to use the new versions.
+
+#> The following package(s) will be installed:
+#> - ape          [5.8]
+#> - aplot        [0.2.3]
+#> - base64enc    [0.1-3]
+#> ...
+#> # ================================================================================ #                                                                           
+#> # To run the "tfpbrowser" app over this dataset, please perform the following from
+#> # the "tfpbrowser" home directory in R:
+
+#> # Start a new session first
+#> # - the environment for this script will interfere with that used by the app
+#> Sys.setenv(APP_DATA_DIR = "~/temp-data/wcdemo")
+#> pkgload::load_all()
+#> run_app()
+```
+
+After running `create_browser_data.R`, the data directory should contain additional entries:
+
+```r
+fs::dir_tree(dirs$data, recurse=1)
+~/temp-data/wcdemo/
+├── mutations
+│   ├── all_mutations.csv
+│   └── defining_mutations.csv
+├── scanner_output
+│   ├── 1601
+│   ├── ...
+│   ├── 2194
+│   ├── scanner-2021-11-27.rds
+│   └── scanner-env-2021-11-27.rds
+├── sequences
+│   └── all_sequences.csv
+└── treeview
+    ├── node_lookup
+    ├── ...
+    └── tree-sequences.rds
+```
+
+The `scanner_output` subdirectory is unmodified by the workflow, but some additional subdirectories
+ have been added (`mutations`, `sequences`, `treeview`).
+
+The data directory now contains ~ 33MB.
+
+Whenever you run the `create_browser_data.R` script, you must restart your R session afterwards. So,
+we restarted R from inside RStudio (`Session` -> `Restart R`).
+
+### Integrating the scanner dataset into tfpbrowser
+
+We want to deploy the app to shinyapps.io. When you do this a single directory is uploaded to
+shinyapps.io and if you want to embed data with the app, that data must be in the directory that
+you upload (unless it is accessed via an API, URL or from another R package).
+
+We will put the contents of the `r dirs$data` directory into the `./inst/app/www/wcdemo-data`
+directory of our app and then configure the app to use this directory when it is deployed.
+
+In a new R session (with the `dirs` variable, above, redefined), we can copy the directory contents
+as follows:
+
+```r
+dirs$embedded_data <- file.path(dirs$repo, "inst", "app", "www", "wcdemo-data")
+
+fs::dir_copy(
+  path = dirs$data,
+  new_path = dirs$embedded_data
+)
+```
+
+```r
+fs::dir_tree(
+  dirs$embedded_data,
+  recurse = 0
+)
+```
+
+```r
+#> ~/github/imp/tfpbrowser//inst/app/www/wcdemo-data
+#> ├── mutations
+#> ├── scanner_output
+#> ├── sequences
+#> └── treeview
+```
+
+### Configuring tfpbrowser
+
+By default, tfpbrowser presents the scanner data that is found at `./inst/app/www/data/`. But the
+files in this directory are hard to update and to keep in-sync with the app's working environment.
+
+To present a dataset from a different directory, you can configure {tfpbrowser} using an environment
+variable.
+
+In the `.Renviron` file, add a line that defines where the `wcdemo-data` directory is, relative to
+the repository root and call this variable `APP_DATA_DIR`.
+
+```bash
+# ./.Renviron
+APP_DATA_DIR=./inst/app/www/wcdemo-data
+GITHUB_PAT=ghp_.....
+```
+
+This environment variable is used by tfpbrowser to find the data for presentation. Some of the files
+within that directory are also served to the user's browser while the app runs.
+
+When you change the `.Renviron` file, you need to restart your R session before those changes affect
+your R session. So we restarted R (`Session` -> `Restart R`) and then checked that the app runs
+locally:
+
+```r
+pkgload::load_all()
+run_app()
+```
+
+The `.Renviron` file will be sent to shinyapps.io during deployment, so the data configuration will
+be sent there too.
+
+### Deploying tfpbrowser
+
+We deploy the app to shinyapps.io using the {rsconnect} package. That package is not included in the
+renv.lock file, so you may need to install it prior to deployment:
+
+```r
+renv::install("rsconnect")
+```
+
+If you haven't deployed from your machine before, you will need to add some (secrets) from your
+shinyapps.io account. Log into shinyapps.io and go to the "Account -> Tokens" page. Click
+"Add Token", then "Show" to view the code needed to configure your connection to shinyapps.io from
+your local machine. Copy the code revealed. Then run that in your R session (including the secret):
+
+```r
+rsconnect::setAccountInfo(
+  name='my-user-name',
+	token='RANDOM123ALPHANUMERIC',
+	secret='some-secret-value'
+)
+```
+
+Then we deployed the app using the following command:
+
+```r
+rsconnect::deployApp()
+```
+
+This uploaded all the files in the repository, which is unnecessary... [TODO: continue here]
+
+```{r setup}
+# library(tfpbrowser)
+```
+
