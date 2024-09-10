@@ -34,7 +34,10 @@ In this example, we have:
 ```{r}
 dirs <- list(
   data = "~/temp-data/wcdemo/",
-  repo = "~/github/imp/tfpbrowser/"
+  repo = "~/github/imp/tfpbrowser/",
+  # A copy of the tfpscanner-processed data will be placed in
+  # this subdirectory of the tfpbrowser repository
+  deploy_data = "~/github/imp/tfpbrowser/deploy-data/wcdemo/"
 )
 ```
 
@@ -199,7 +202,7 @@ fs::dir_tree(dirs$data, recurse=1)
 ```
 
 The `scanner_output` subdirectory is unmodified by the workflow, but some additional subdirectories
- have been added (`mutations`, `sequences`, `treeview`).
+have been added (`mutations`, `sequences`, `treeview`).
 
 The data directory now contains ~ 33MB.
 
@@ -212,30 +215,28 @@ We want to deploy the app to shinyapps.io. When you do this a single directory i
 shinyapps.io and if you want to embed data with the app, that data must be in the directory that
 you upload (unless it is accessed via an API, URL or from another R package).
 
-We will put the contents of the `r dirs$data` directory into the `./inst/app/www/wcdemo-data`
+We will put the contents of the `r dirs$data` directory into the `./deploy-data/wcdemo/`
 directory of our app and then configure the app to use this directory when it is deployed.
 
 In a new R session (with the `dirs` variable, above, redefined), we can copy the directory contents
 as follows:
 
 ```r
-dirs$embedded_data <- file.path(dirs$repo, "inst", "app", "www", "wcdemo-data")
-
 fs::dir_copy(
   path = dirs$data,
-  new_path = dirs$embedded_data
+  new_path = dirs$deploy_data
 )
 ```
 
 ```r
 fs::dir_tree(
-  dirs$embedded_data,
+  dirs$deploy_data,
   recurse = 0
 )
 ```
 
 ```r
-#> ~/github/imp/tfpbrowser//inst/app/www/wcdemo-data
+#> ~/github/imp/tfpbrowser/deploy-data/wcdemo/
 #> ├── mutations
 #> ├── scanner_output
 #> ├── sequences
@@ -250,12 +251,12 @@ files in this directory are hard to update and to keep in-sync with the app's wo
 To present a dataset from a different directory, you can configure {tfpbrowser} using an environment
 variable.
 
-In the `.Renviron` file, add a line that defines where the `wcdemo-data` directory is, relative to
-the repository root and call this variable `APP_DATA_DIR`.
+In the `.Renviron` file, add a line that defines where the `deploy-data/wcdemo/` directory is,
+relative to the repository root and call this variable `APP_DATA_DIR`.
 
 ```bash
 # ./.Renviron
-APP_DATA_DIR=./inst/app/www/wcdemo-data
+APP_DATA_DIR=./deploy-data/wcdemo/
 GITHUB_PAT=ghp_.....
 ```
 
@@ -320,3 +321,10 @@ The minimum files you will need for deployment are (`.Rprofile`, `.Renviron`, `a
 `DESCRIPTION`, `NAMESPACE`, `renv.lock`, and the contents of `inst/` and `R/`). If the data you wish
 to deploy with the app is in some other directory, this must also be selected for upload.
 
+You may receive an warning message indicating that (file)paths outside of the project are referred
+to by some scripts within this project. These arise in `vignettes/deploy.Rmd` and
+`scripts/create_browser_data.R` and (provided these are the only files that refer to non-embedded
+filepaths) you can safely ignore that warning (`deploy.Rmd` and `create_browser_data.Rmd` needn't
+be uploaded to shinyapps.io anyway).
+
+Deployment may take a long time (around 5 minutes for deployment with the `wcdemo` example data).
