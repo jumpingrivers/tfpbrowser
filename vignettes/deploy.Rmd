@@ -324,7 +324,7 @@ to deploy with the app is in some other directory, this must also be selected fo
 You may receive an warning message indicating that (file)paths outside of the project are referred
 to by some scripts within this project. These arise in `vignettes/deploy.Rmd` and
 `scripts/create_browser_data.R` and (provided these are the only files that refer to non-embedded
-filepaths) you can safely ignore that warning (`deploy.Rmd` and `create_browser_data.Rmd` needn't
+filepaths) you can safely ignore that warning (`deploy.Rmd` and `create_browser_data.R` needn't
 be uploaded to shinyapps.io anyway).
 
 Deployment may take a long time (around 5 minutes for deployment with the `wcdemo` example data).
