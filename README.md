@@ -160,7 +160,7 @@ To do this either:
   next section); or
   - copy the contents of that directory into `inst/app/www/data/` and re-install {tfpbrowser}
 
-## Configuring the app
+### Configuring the app
 
 Data presented by the app can be obtained from an arbitrary directory on the server.
 To configure the data-directory, use the environment variable `APP_DATA_DIR`.
@@ -182,3 +182,22 @@ run_app()
 
 An alternative way to specify this data directory is to add the line
 `APP_DATA_DIR="/home/me/tfpdata/"` to a `.Renviron` file in the project root.
+
+## Deploying the app
+
+Please see the vignette `deploy` in {tfpbrowser} which provides a walk-through for deploying to
+[shinyapps.io](https://www.shinyapps.io/). This is in `./vignettes/deploy.Rmd` in the {tfpbrowser}
+repository.
+
+If working in the tfpbrowser repository, developers may need to build the vignettes:
+
+```r
+# Build the vignette (Optional, if you haven't installed tfpbrowser)
+# In the repository for {tfpbrowser}
+devtools::build_vignettes()
+pkgload::load_all()
+
+# View the vignette
+vignette("deploy", package = "tfpbrowser")
+```
+
