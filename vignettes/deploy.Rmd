@@ -32,7 +32,7 @@ In this example, we have:
 - and are using `r R.version.string`
 
 ```{r}
-dirs <- list(
+dirs = list(
   data = "~/temp-data/wcdemo/",
   repo = "~/github/imp/tfpbrowser/",
   # A copy of the tfpscanner-processed data will be placed in
