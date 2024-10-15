@@ -94,6 +94,15 @@ Do not commit your `.Renviron` file using git! This file stores variables / secr
 required when the app runs. The variables will differ from one deployment to another, and the
 secrets should be secret!
 
+#### MPI
+
+`create_browser_data.R` calls `{tfpscanner}`, which imports the `{Rmpi}` package. MPI is a code
+parallelisation tool and must be installed on your machine before `{Rmpi}` can be installed. So
+before running the `create_browser_data` script.
+
+Instructions for installing {Rmpi} can be found [here](https://www.stats.uwo.ca/faculty/yu/Rmpi/).
+MPI for Windows can be obtained from [Microsoft](https://learn.microsoft.com/en-us/message-passing-interface/microsoft-mpi).
+
 ### The scanner dataset
 
 The contents of the scanner dataset directory are as follows:
