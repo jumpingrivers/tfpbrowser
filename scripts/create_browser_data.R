@@ -7,6 +7,11 @@
 #   - or `source("./scripts/create_browser_data.R")` in R
 # - Once finished, this script will explain how to use the created figures within tfpbrowser.
 
+# Installation options
+# - when on Windows, you will need the --no-lock option for installing packages so that any packages
+#   that require C source compilation are placed into writeable locations
+options(INSTALL_opts = "--no-lock")
+
 # User parameters -----------------------------------------------------------------------------
 
 # File paths can be specified either relative to the working directory, or as absolute paths
