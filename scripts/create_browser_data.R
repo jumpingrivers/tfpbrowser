@@ -46,7 +46,9 @@ treeview_args <- list(
 
 tfpbrowser_env <- jsonlite::read_json("renv.lock")
 
-required_packages <- c("BiocVersion", "fastmap", "ggplot2", "ggiraph", "ggtree")
+required_packages <- c(
+  "BiocVersion", "fastmap", "ggplot2", "ggiraph", "ggtree", "rmarkdown"
+)
 required_versions <- Map(
   function(package, pkg_details) {
     paste0(package, "@", pkg_details[["Version"]])
@@ -59,11 +61,22 @@ required_versions <- Map(
 
 renv::use(
   # The versions of these packages should match those used in the 'renv.lock' for tfpbrowser, to
-  # ensure that the figure formatting
+  # ensure that the figure objects created by tfpscanner can be imported into tfpbrowser
+  #
+  # - ggtree for Bioconductor 3.16 depends upon a specific (outdated) version of ggplot2;
+  #   later versions of ggtree have been rewritten to use newer ggplot2 versions. So if you ever
+  #   update Bioconductor/R versions, you should start using the ggtree from Bioconductor that uses
+  #   the newer version of ggplot2
+  #
+  # - we force {rmarkdown} installation despite it being a transitive-dependency of tfpscanner.
+  #   Without forcing it's installation, create_browser_data() runs in an env with no rmarkdown
+  #   namespace
+
   required_versions[["BiocVersion"]],
   required_versions[["ggplot2"]],
   required_versions[["fastmap"]],
   required_versions[["ggiraph"]],
+  required_versions[["rmarkdown"]],
   "YuLab-SMU/ggtree@daf3371",
   # These packages are required implicitly by {tfpscanner}, but not by {tfpbrowser}
   "svglite@2.1.3",
