@@ -88,7 +88,7 @@ renv::use(
   # This is the HEAD of `jumpingrivers:dev-202403` as of 2024-04-15
   # If the commit ID is absent, this will use the latest 'master' branch
   # Including the commit ID allows us to use development-versions of the 'tfpscanner' package
-  "mrc-ide/tfpscanner@7ee27416d69ec3eaf7e4158f38c31125b3c38c7d",
+  "mrc-ide/tfpscanner@cff68e483226bebe35436ee527fc61dcb5671951",
   library = normalizePath(file.path(tempdir(), "renv", "create_browser_data"))
 )
 
