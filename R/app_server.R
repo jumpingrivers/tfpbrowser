@@ -19,10 +19,11 @@ app_server = function(input, output, session) {
 
   shiny::observe({
     mutation_set = available_mutations(data_dir = data_dir)
-    shiny::updateSelectInput(
+    shiny::updateSelectizeInput(
       session = session,
       inputId = "mutationChoice",
-      choices = mutation_set
+      choices = mutation_set,
+      server = TRUE
     )
   })
 
@@ -73,11 +74,11 @@ app_server = function(input, output, session) {
     )
     # select input for sequences
     if (choice == "tree-sequences.rds") {
-      avail_seqs = data.table::as.data.table(available_sequences(data_dir))
-      names(avail_seqs) = "Sequences"
-      shiny::updateSelectInput(
+      avail_seqs = available_sequences(data_dir)
+      shiny::updateSelectizeInput(
         inputId = "sequenceChoice",
-        choices = avail_seqs
+        choices = avail_seqs,
+        server = TRUE
       )
     }
   })

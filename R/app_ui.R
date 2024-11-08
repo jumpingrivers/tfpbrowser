@@ -54,19 +54,17 @@ app_ui = function(request) {
               ),
 
               # choose type of mutation
-              shiny::selectInput(
+              shiny::selectizeInput(
                 inputId = "mutationChoice",
                 label = "Mutation",
-                choices = character(0),
-                selectize = FALSE
+                choices = character(0)
               ),
 
               # choose type of sequence
-              shiny::selectInput(
+              shiny::selectizeInput(
                 inputId = "sequenceChoice",
                 label = "Sequence",
-                choices = NULL,
-                selectize = FALSE
+                choices = character(0)
               ),
             ),
             shiny::div(
