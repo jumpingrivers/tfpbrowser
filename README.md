@@ -201,3 +201,42 @@ pkgload::load_all()
 vignette("deploy", package = "tfpbrowser")
 ```
 
+## Customising formatting and content
+
+### Treeviews
+
+The treeviews presented in this app are created by the `create_browser_data()` function in
+{tfpscanner}. We recommend using the `scripts/create_browser_data.R` script in {tfpbrowser}
+(described above) to run that function.
+
+`tfpscanner::create_browser_data()` respects all of the formatting arguments respects all of the
+formatting arguments for `tfpscanner::treeview()`. See the documentation for
+`tfpscanner::treeview()` for up-to-date details of the formatting options. The main options are
+
+- `dendrogram_colours` - A vector of colour-strings, this controls the branch-colour for the
+  dendrogram, and ranges (by default) from dark blue to dark red via an intermediate light-grey.
+- `heatmap_width` - The width of the heatmap that is presented next to the dendrogram. This is
+  passed as the `width` argument to `ggtree::gheatmap()`.
+- `heatmap_offset` - The distance between the dendrogram and the heatmap. This is passed as the
+  `offset` argument to `ggtree::gheatmap()`.
+- `heatmap_lab_offset` - The offset distance for the genotype labels in the heatmap columns. This is
+  passed as the `colnames_offset_y` argument to `ggtree::gheatmap()`.
+- `heatmap_fill` - A named vector of colours used to indicate the presence and absence of a genotype
+  in the heatmap. Defaults are FALSE: light-grey (for absence of the genotype), TRUE: dark-grey (for
+  presence of the genotype). Passed to `ggplot2::scale_fill_manual()`
+
+Custom values for these arguments can be set by manually editing the `treeview_args` list in
+`./scripts/create_browser_data.R` (tfpbrowser), or directly, as arguments to the function
+`tfpscanner::create_browser_data()`.
+
+### Pop-ups
+
+When a user hovers their mouse over a node in a treeview, a pop-up displaying statistics about that
+node is displayed. To modify the information presented in this popup requires modifications to the
+source code of {tfpscanner}. See the `tfpscanner::append_interactivity_data()` function.
+
+### 'About' text
+
+The text that is presented in the "About" panel of the app can be modified by updating the file
+`./inst/app/www/content/about.md` in {tfpbrowser}. This is a markdown document that gets rendered
+in HTML by the tfpbrowser application.
